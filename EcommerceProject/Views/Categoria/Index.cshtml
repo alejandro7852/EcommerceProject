@@ -1,0 +1,35 @@
+﻿@model List<CategoriaVM>
+
+<div class="row justify-content-between mt-4">
+    <div class="col-4">
+        <h4>Categorias</h4>
+    </div>
+    <div class="col-4 text-end">
+        <a href="#" class="btn btn-success"><i class="fa-solid fa-plus"></i>Crear nueva</a>
+    </div>
+</div>
+<hr />
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Nombre</th>
+            <th style="width:150px">Acciones</th>
+        </tr>
+         
+    </thead>
+
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.Nombre</td>
+                <td style="width:150px">
+                    <a href="#" class="btn btn-sm btn-primary"><i class="fa-solid fa-pen-to-square"></i></a>
+                    <button class="btn btn-sm btn-danger"><i class="fa-solid fa-trash"></i></button>
+                </td>
+            </tr>
+        }
+    </tbody>
+
+</table>
