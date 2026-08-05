@@ -8,5 +8,6 @@ namespace EcommerceProject.Entities
         [Required]
         public string Nombre { get; set; }
 
+        public ICollection<Producto> Productos { get; set; } 
     }
 }

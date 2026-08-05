@@ -14,7 +14,7 @@ namespace EcommerceProject.Entities
         public int Stock { get; set; }
         public string? NombreImagen { get; set; } = null;
 
-        public Categoria? categoria { get; set; }
+        public Categoria? Categoria { get; set; }
 
     }
 }
