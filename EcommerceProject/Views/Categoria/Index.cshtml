@@ -16,7 +16,7 @@
             <th>Nombre</th>
             <th style="width:150px">Acciones</th>
         </tr>
-         
+
     </thead>
 
     <tbody>
@@ -26,19 +26,37 @@
                 <td>@item.Nombre</td>
                 <td style="width:150px">
                     <a href="/Categoria/AddEdit/@item.CategoriaId" class="btn btn-sm btn-primary"><i class="fa-solid fa-pen-to-square"></i></a>
-                    <button class="btn btn-sm btn-danger"><i class="fa-solid fa-trash"></i></button>
+                    <button class="btn btn-sm btn-danger" onclick="deleteItem(@item.CategoriaId)"><i class="fa-solid fa-trash"></i></button>
                 </td>
             </tr>
         }
     </tbody>
 
 </table>
+@section Scripts {
+    <Script>
+        function deleteItem(id){
+        Swal.fire({
+          title: "Advertencia",
+          text: "Estás seguro que deseas eliminar esta categoría?",
+          icon: "warning",
+          showCancelButton: true,
+          confirmButtonColor: "#3085d6",
+          cancelButtonColor: "#d33",
+          confirmButtonText: "Eliminar",
+          cancelButtonText: "Cancelar"
+        }).then((result) => {
+          if (result.isConfirmed)
+          {
+            window.location.href = '@Url.Action("Delete", "Categoria")'+'?id='+id;
+            Swal.fire({
+            title: "Eliminado!",
+            text: "Eliminado correctamente",
+            icon: "success"
+          });
+          }
 
-<Script>
-    function deleteite(id){
-        id(confirm("Estas seguro de eliminar esta categoría?")){
-            window.location.href = '@Url.Action("Delete","Categoria")'+'?id='+id;
+        });
         }
-    }
-
-</Script>
+    </Script>
+}

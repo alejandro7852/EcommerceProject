@@ -5,6 +5,10 @@
     {
       "library": "font-awesome@7.3.0",
       "destination": "wwwroot/lib/font-awesome/"
+    },
+    {
+      "library": "sweetalert2@11.26.25",
+      "destination": "wwwroot/lib/sweetalert2/"
     }
   ]
 }
