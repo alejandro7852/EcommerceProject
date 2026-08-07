@@ -19,5 +19,43 @@ namespace EcommerceProject.Services
             }).ToList();
             return categoriasVM;
         }
+
+        public async Task AddAsync(CategoriaVM viewModel)
+        {
+            var entity = new Categoria
+            {
+                Nombre = viewModel.Nombre,
+            };
+
+            await _categoriaRepo.AddAsync(entity);
+        }
+
+        public async Task<CategoriaVM?> GetByIdAsync(int id)
+        {
+            var categoria = await _categoriaRepo.GetByIdAsync(id);
+            var categoriaVM = new CategoriaVM();
+
+            if(categoria!=null)
+            {
+                categoriaVM.Nombre = categoria.Nombre;
+                categoriaVM .CategoriaId = categoria.CategoriaId;
+            }
+            return categoriaVM;
+        }
+        public async Task EditAsync(CategoriaVM viewModel)
+        {
+            var entity = new Categoria
+            {
+                CategoriaId = viewModel.CategoriaId,
+                Nombre = viewModel.Nombre,
+            };
+            await _categoriaRepo.EditAsync(entity);
+        }
+        public async Task EliminarAsync(int id)
+        {
+            var categoria = await _categoriaRepo.GetByIdAsync(id);
+            await _categoriaRepo.DeleteAsync(categoria!);
+        }
+
     }
 }

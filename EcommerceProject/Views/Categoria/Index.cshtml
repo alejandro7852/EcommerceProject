@@ -5,7 +5,7 @@
         <h4>Categorias</h4>
     </div>
     <div class="col-4 text-end">
-        <a href="#" class="btn btn-success"><i class="fa-solid fa-plus"></i>Crear nueva</a>
+        <a href="/Categoria/AddEdit" class="btn btn-success"><i class="fa-solid fa-plus"></i>Crear nueva</a>
     </div>
 </div>
 <hr />
@@ -25,7 +25,7 @@
             <tr>
                 <td>@item.Nombre</td>
                 <td style="width:150px">
-                    <a href="#" class="btn btn-sm btn-primary"><i class="fa-solid fa-pen-to-square"></i></a>
+                    <a href="/Categoria/AddEdit/@item.CategoriaId" class="btn btn-sm btn-primary"><i class="fa-solid fa-pen-to-square"></i></a>
                     <button class="btn btn-sm btn-danger"><i class="fa-solid fa-trash"></i></button>
                 </td>
             </tr>
@@ -33,3 +33,12 @@
     </tbody>
 
 </table>
+
+<Script>
+    function deleteite(id){
+        id(confirm("Estas seguro de eliminar esta categoría?")){
+            window.location.href = '@Url.Action("Delete","Categoria")'+'?id='+id;
+        }
+    }
+
+</Script>
