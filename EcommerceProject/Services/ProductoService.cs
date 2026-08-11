@@ -72,7 +72,7 @@ namespace EcommerceProject.Services
 
             return ProductoVM;
         }
-        public async Task AgregarProducto(ProductoVM viewModel)
+        public async Task AddAsync(ProductoVM viewModel)
         {
             if(viewModel.Imagen != null)
             {
@@ -97,7 +97,7 @@ namespace EcommerceProject.Services
 
             await _productoRepo.AddAsync(entity);
         }
-        public async Task EditarProducto(ProductoVM viewModel)
+        public async Task EditAsync(ProductoVM viewModel)
         {
             var producto = await _productoRepo.GetByIdAsync(viewModel.ProductoId);
 
@@ -133,7 +133,7 @@ namespace EcommerceProject.Services
 
             await _productoRepo.EditAsync(producto);
         }
-        public async Task EliminarProducto(int id)
+        public async Task EliminarAsync(int id)
         {
             var producto = await _productoRepo.GetByIdAsync(id);
             await _productoRepo.DeleteAsync(producto);

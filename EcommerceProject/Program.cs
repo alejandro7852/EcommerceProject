@@ -13,6 +13,7 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 });
 builder.Services.AddScoped(typeof(GenericRepository<>));
 builder.Services.AddScoped<CategoriaService>();
+builder.Services.AddScoped<ProductoService>();
 
 var app = builder.Build();
 

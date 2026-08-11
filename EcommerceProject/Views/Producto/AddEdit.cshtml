@@ -1,0 +1,62 @@
+﻿@model ProductoVM;
+@{
+    var titulo = Model.ProductoId == 0 ? "Agregar Producto" : "Editar Producto";
+    var btnAccion = Model.ProductoId == 0 ? "Agregar" : "Editar";
+}
+<div class="row">
+    <h2>@titulo</h2>
+        <hr />
+    <div class="col-6">
+
+        
+        <form action="/Producto/AddEdit" method="post" enctype="multipart/form-data">
+            <input type="hidden" asp-for="ProductoId" />
+            <div class="mb-3">
+                <label class="form-label">Categoria</label>
+                <select class="form-select" asp-for="Categoria.CategoriaId" asp-items="@Model.Categorias">
+                <option selected disabled>--Seleccionar--</option>
+                </select>
+                <span asp-validation-for="Categoria" class="text-danger"></span>
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Nombre</label>
+                <input type="text" class="form-control" asp-for="Nombre" autocomplete="off">
+                <span asp-validation-for="Nombre" class="text-danger"></span>
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Descripcion</label>
+                <input type="text" class="form-control" asp-for="Descripcion" autocomplete="off">
+                <span asp-validation-for="Descripcion" class="text-danger"></span>
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Precio</label>
+                <input type="number" class="form-control" asp-for="Precio" autocomplete="off">
+                <span asp-validation-for="Precio" class="text-danger"></span>
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Stock</label>
+                <input type="number" class="form-control" asp-for="Stock" autocomplete="off">
+                <span asp-validation-for="Stock" class="text-danger"></span>
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Subir Imagen</label>
+                <input type="file" class="form-control" asp-for="Imagen" >
+            </div>
+
+            @if (ViewBag.message != null)
+            {
+                <div class="alert alert-success" role="alert">
+                    @ViewBag.message
+                </div>
+            }
+            <div class="d-grid gap-2 d-md-block mt-4">
+                <button class="btn btn-primary" type="submit">@btnAccion</button>
+                <a href="/Producto/Index" class="btn btn-warning">Atras</a>
+            </div>
+        </form>
+    </div>
+    <div class="col-6">
+        <img src="~/images/@Model.NombreImagen" class="rounded"  width="300"height="320" alt="@Model.Imagen"/>
+    </div>
+
+</div>
