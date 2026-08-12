@@ -5,16 +5,16 @@
 }
 <div class="row">
     <h2>@titulo</h2>
-        <hr />
+    <hr />
     <div class="col-6">
 
-        
+
         <form action="/Producto/AddEdit" method="post" enctype="multipart/form-data">
             <input type="hidden" asp-for="ProductoId" />
             <div class="mb-3">
                 <label class="form-label">Categoria</label>
                 <select class="form-select" asp-for="Categoria.CategoriaId" asp-items="@Model.Categorias">
-                <option selected disabled>--Seleccionar--</option>
+                    <option selected disabled>--Seleccionar--</option>
                 </select>
                 <span asp-validation-for="Categoria" class="text-danger"></span>
             </div>
@@ -25,7 +25,8 @@
             </div>
             <div class="mb-3">
                 <label class="form-label">Descripcion</label>
-                <input type="text" class="form-control" asp-for="Descripcion" autocomplete="off">
+                <textarea id="summernote" class="form-control" asp-for="Descripcion" autocomplete="off">
+                </textarea>
                 <span asp-validation-for="Descripcion" class="text-danger"></span>
             </div>
             <div class="mb-3">
@@ -40,7 +41,7 @@
             </div>
             <div class="mb-3">
                 <label class="form-label">Subir Imagen</label>
-                <input type="file" class="form-control" asp-for="Imagen" >
+                <input type="file" class="form-control" asp-for="Imagen">
             </div>
 
             @if (ViewBag.message != null)
@@ -56,7 +57,21 @@
         </form>
     </div>
     <div class="col-6">
-        <img src="~/images/@Model.NombreImagen" class="rounded"  width="300"height="320" alt="@Model.Imagen"/>
+        <img src="~/images/@Model.NombreImagen" class="rounded" width="300" height="320" alt="@Model.Imagen" />
     </div>
 
 </div>
+@section Styles {
+    <link href="~/lib/summernote/summernote.min.css" rel="stylesheet" />
+    <link href="~/lib/summernote/summernote-bs5.min.css" rel="stylesheet" />
+}
+@section Scripts {
+    <script src="~/lib/summernote/summernote.min.js"></script>
+    <script src="~/lib/summernote/summernote-bs5.min.js"></script>
+
+    <script>
+        $(document).ready(function() {
+          $('#summernote').summernote();
+        });
+    </script>
+}

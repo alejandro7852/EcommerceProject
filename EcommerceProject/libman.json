@@ -9,6 +9,20 @@
     {
       "library": "sweetalert2@11.26.25",
       "destination": "wwwroot/lib/sweetalert2/"
+    },
+    {
+      "library": "summernote@0.9.1",
+      "destination": "wwwroot/lib/summernote/",
+      "files": [
+        "summernote.min.js",
+        "summernote-bs5.min.css",
+        "summernote-bs5.min.js",
+        "summernote.min.css",
+        "font/summernote.eot",
+        "font/summernote.ttf",
+        "font/summernote.woff",
+        "font/summernote.woff2"
+      ]
     }
   ]
 }
