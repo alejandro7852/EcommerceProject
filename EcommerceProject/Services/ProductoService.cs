@@ -138,5 +138,40 @@ namespace EcommerceProject.Services
             var producto = await _productoRepo.GetByIdAsync(id);
             await _productoRepo.DeleteAsync(producto);
         }
+        public async Task<IEnumerable<ProductoVM>> GetCatalogoAsync(int idCategoria = 0, string busqueda="")
+        {
+            var condiciones = new List<Expression<Func<Producto, bool>>>
+            {
+                x=> x.Stock > 0
+            };
+
+            if(idCategoria != 0)
+            {
+                condiciones.Add(x => x.CategoriaId == idCategoria);
+            }
+
+            if (!string.IsNullOrEmpty(busqueda))
+            {
+                condiciones.Add(x => x.Nombre.Contains(busqueda));
+            }
+
+            var productos = await _productoRepo.GetAllAsync(
+                conditions: condiciones.ToArray()
+                );
+
+            var productosVM = productos.Select(item =>
+            new ProductoVM
+            {
+                ProductoId = item.ProductoId,
+                Nombre = item.Nombre,
+                Descripcion = item.Descripcion,
+                Precio = item.Precio,
+                Stock = item.Stock,
+                NombreImagen = item.NombreImagen,
+            }
+            ).ToList();
+
+            return productosVM;
+        }
     }
 }

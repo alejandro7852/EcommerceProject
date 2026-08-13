@@ -1,21 +1,40 @@
-using System.Diagnostics;
+using EcommerceProject.Entities;
 using EcommerceProject.Models;
+using EcommerceProject.Services;
 using Microsoft.AspNetCore.Mvc;
+using System.Diagnostics;
 
 namespace EcommerceProject.Controllers
 {
-    public class HomeController : Controller
+    public class HomeController(
+        CategoriaService _categoriaService,
+        ProductoService _productoService
+        ) : Controller
     {
-        private readonly ILogger<HomeController> _logger;
-
-        public HomeController(ILogger<HomeController> logger)
+        public async Task<IActionResult> IndexAsync()
         {
-            _logger = logger;
+            var categorias = await _categoriaService.GetAllAsync();
+            var productos = await _productoService.GetCatalogoAsync();
+            var catalogo = new CatalogoVM { Categorias = categorias, Productos = productos };
+
+            return View(catalogo);
         }
-
-        public IActionResult Index()
+        public async Task<IActionResult> FiltrarPorCategoria(int id, string nombre)
         {
-            return View();
+            var categorias = await _categoriaService.GetAllAsync();
+            var productos = await _productoService.GetCatalogoAsync(idCategoria:id); 
+            var catalogo = new CatalogoVM { Categorias = categorias, Productos = productos, filtro = nombre };
+
+            return View("index",catalogo);
+        }
+        [HttpPost]
+        public async Task<IActionResult> FiltrarPorBusqueda(string busqueda)
+        {
+            var categorias = await _categoriaService.GetAllAsync();
+            var productos = await _productoService.GetCatalogoAsync(busqueda: busqueda); 
+            var catalogo = new CatalogoVM { Categorias = categorias, Productos = productos, filtro = $"Result for:{busqueda}" };
+
+            return View("index",catalogo);
         }
 
         public IActionResult Privacy()
