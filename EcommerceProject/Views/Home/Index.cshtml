@@ -21,7 +21,7 @@
             </div>
 
             <div class="col-sm-12 col-md-9 col-lg-9">
-                <form action="Home/FiltrarPorBusqueda" method="post">
+                <form asp-controller="Home" asp-action="FiltrarPorBusqueda" method="post">
                     <div class="input-group">
 
                         <input type="text" class="form-control" autocomplete="off" name="busqueda" placeholder="¿Qué Estás Buscando?" />
@@ -59,7 +59,7 @@
                     </div>
                     <div class="card-footer p-4 pt-0 border-0 bg-transparent">
                         <div class="text-center">
-                            <a class="btn btn-outline-dark mt-auto" role="button">Ver detalle</a>
+                            <a class="btn btn-outline-dark mt-auto" role="button" href="/Home/ProductoDetalle?id=@p.ProductoId">Ver detalle</a>
                         </div>
                     </div>
                 </div>

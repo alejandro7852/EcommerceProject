@@ -36,7 +36,11 @@ namespace EcommerceProject.Controllers
 
             return View("index",catalogo);
         }
-
+        public async Task<IActionResult> ProductoDetalle(int id)
+        {
+            var producto = await _productoService.GetByIdAsync(id);
+            return View(producto);
+        }
         public IActionResult Privacy()
         {
             return View();
