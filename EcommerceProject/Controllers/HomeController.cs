@@ -1,6 +1,7 @@
 using EcommerceProject.Entities;
 using EcommerceProject.Models;
 using EcommerceProject.Services;
+using EcommerceProject.Utilities;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 
@@ -41,6 +42,36 @@ namespace EcommerceProject.Controllers
             var producto = await _productoService.GetByIdAsync(id);
             return View(producto);
         }
+        [HttpPost]
+        public async Task<IActionResult> AgregarItemCarrito(int productoId, int cantidad)
+        {
+            var producto = await _productoService.GetByIdAsync(productoId);
+
+
+            var carro = HttpContext.Session.Get<List<CarroItemVM>>("Carro") ?? new List<CarroItemVM>();
+
+            if (carro.Find(x => x.ProductoId == productoId) == null)
+            {
+                carro.Add(new CarroItemVM
+                {
+                    ProductoId = productoId,
+                    Nombre = producto.Nombre,
+                    ImagenNombre = producto.Nombre,
+                    Precio = producto.Precio,
+                    Cantidad = cantidad
+                });
+            }
+            else
+            {
+                var actualizarCarrito = carro.Find(x => x.ProductoId == productoId);
+                actualizarCarrito!.Cantidad += cantidad;
+            }
+            HttpContext.Session.Set("Carro", carro);
+            ViewBag.message = "Producto agregado al carrito";
+
+            return View("ProductoDetalle", producto);
+        }
+        
         public IActionResult Privacy()
         {
             return View();
