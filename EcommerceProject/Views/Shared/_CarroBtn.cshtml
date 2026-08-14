@@ -1,0 +1,16 @@
+﻿@using EcommerceProject.Utilities
+@{
+    int carroCount = 0;
+    if(Context.Session.Get<List<CarroItemVM>>("Carro")!= null)
+    {
+        var carro = Context.Session.Get<List<CarroItemVM>>("Carro");
+        carroCount = carro.Count();
+    }
+}
+<li class="nav-item ms-auto" >
+    <a class="btn btn-light d-flex align-items-center gap-2 px-3 rounded-pill" href="/Home/VerCarro">
+        <i class="fa-solid fa-cart-shopping"></i>
+        
+        <span class="badge bg-dark text-white rounded-pill">@carroCount</span>
+    </a>
+</li>

@@ -3,6 +3,7 @@ using EcommerceProject.Models;
 using EcommerceProject.Services;
 using EcommerceProject.Utilities;
 using Microsoft.AspNetCore.Mvc;
+using System.Collections.Generic;
 using System.Diagnostics;
 
 namespace EcommerceProject.Controllers
@@ -56,7 +57,7 @@ namespace EcommerceProject.Controllers
                 {
                     ProductoId = productoId,
                     Nombre = producto.Nombre,
-                    ImagenNombre = producto.Nombre,
+                    ImagenNombre = producto.NombreImagen ?? producto.Nombre,
                     Precio = producto.Precio,
                     Cantidad = cantidad
                 });
@@ -76,7 +77,20 @@ namespace EcommerceProject.Controllers
         {
             return View();
         }
+        public IActionResult VerCarro()
+        {
+            var carro = HttpContext.Session.Get<List<CarroItemVM>>("Carro") ?? new List<CarroItemVM>();
 
+            return View(carro);
+        }
+        public IActionResult EliminarProductoCarro(int productoId)
+        {
+            var carro = HttpContext.Session.Get<List<CarroItemVM>>("Carro");
+            var producto = carro.Find(x => x.ProductoId == productoId);
+            carro.Remove(producto!);
+            HttpContext.Session.Set("Carro", carro);
+            return View("VerCarro", carro);
+        }
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {
