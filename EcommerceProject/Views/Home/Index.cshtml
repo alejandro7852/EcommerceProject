@@ -14,7 +14,12 @@
             <div class="col-sm-12 col-md-3 col-lg-3">
                 <div class="d-grid">
                     <!-- Button trigger modal -->
-                    <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                    <button class="btn btn-success"
+                            type="button"
+                            data-bs-toggle="offcanvas"
+                            data-bs-target="#categoriasOffcanvas">
+                        <i class="fas fa-tags me-1"></i>
+
                         Categorías
                     </button>
                 </div>
@@ -37,14 +42,11 @@
 
 
     </div>
-    @if (Model.filtro != "" && Model.filtro != null)
+    @if (!string.IsNullOrEmpty(Model.filtro))
     {
-        <div class="row bg-light p-2 mt-2">
-            <div class="col-sm-12">
-                @Model.filtro
-            </div>
-        </div>
+        <span>@Model.filtro</span>
     }
+   
     <div class="row row-cols-1 row-cols-sm-2 row-cols-md-4 g-4 py-4">
         @foreach (var p in Model.Productos)
         {
@@ -74,40 +76,55 @@
 
 
 <!-- Modal -->
-<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Categorías</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+<div class="offcanvas offcanvas-start" tabindex="-1" id="categoriasOffcanvas">
 
-            </div>
+    <div class="offcanvas-header border-bottom">
+        <h5 class="offcanvas-title fw-bold">
+            <i class="fas fa-tags me-2"></i>
+            Categorías
+        </h5>
 
-            <div class="modal-body">
-
-                <div class="row row-cols-2 g-2">
-                    <div class="col d-grid">
-                        <a class="btn btn-outline-dark"
-                           asp-controller="Home" asp-action="FiltrarPorCategoria" asp-route-id="0" asp-route-nombre=""> Todas</a>
-                    </div>
-                    @foreach (var categoria in Model.Categorias)
-                    {
-                        <div class="col d-grid">
-                            <a class="btn btn-outline-dark"
-                               asp-controller="Home" asp-action="FiltrarPorCategoria"
-                               asp-route-id="@categoria.CategoriaId" asp-route-nombre="@categoria.Nombre">
-                                @categoria.Nombre
-                            </a>
-                        </div>
-                    }
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-            </div>
-        </div>
+        <button type="button"
+                class="btn-close"
+                data-bs-dismiss="offcanvas"
+                aria-label="Cerrar">
+        </button>
     </div>
+
+    <div class="offcanvas-body p-0">
+
+        <div class="list-group list-group-flush">
+
+            <!-- Todas -->
+            <a class="list-group-item list-group-item-action py-3"
+               asp-controller="Home"
+               asp-action="FiltrarPorCategoria"
+               asp-route-id="0"
+               asp-route-nombre="">
+
+                <i class="fas fa-border-all me-2"></i>
+                Todas
+            </a>
+
+            @foreach (var categoria in Model.Categorias)
+            {
+                <a class="list-group-item list-group-item-action py-3"
+                   asp-controller="Home"
+                   asp-action="FiltrarPorCategoria"
+                   asp-route-id="@categoria.CategoriaId"
+                   asp-route-nombre="@categoria.Nombre">
+
+                    <i class="fas fa-tag me-2"></i>
+                    @categoria.Nombre
+                </a>
+            }
+
+        </div>
+
+    </div>
+
 </div>
+
 
 
 @* <div class="row g-4">

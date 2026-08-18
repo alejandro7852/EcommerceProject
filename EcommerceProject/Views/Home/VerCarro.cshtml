@@ -3,11 +3,13 @@
 @if (Model.Count != 0)
 {
     <div class="row justify-content-between mt-4">
-        <div class="col-4">
-            <h4>Productos del Carro</h4>
+        <div class="col-sm-4">
+            <h4 class="tittle">Resumen de la compra</h4>
         </div>
         <div class="col-4 text-end">
-            <button class="btn btn-success">Comprar</button>
+            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                <i class="fa-solid fa-cart-shopping"></i> Comprar
+            </button>
         </div>
     </div>
     <hr />
@@ -56,3 +58,40 @@ else
         Sin productos agregados al carro.
     </div>
 }
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="exampleModalLabel">Revisa y paga tu compra</h4>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form action="/Home/PagarAhora" method="post">
+                <div class="modal-body">
+
+                    <div class="row g-3">
+                        <h5> Dirección de envío</h5>
+                        <div class="col-12">
+                            <input type="email" class="form-control" placeholder="Email" />
+                        </div>
+                        <div class="col-12">
+                            <input type="text" class="form-control" placeholder="Dirección" />
+                        </div>
+                        <div class="col-12">
+                            <input type="text" class="form-control" placeholder="País" />
+                        </div>
+                        <div class="col-12">
+                            <input type="text" class="form-control" placeholder="Ciudad" />
+                        </div>
+
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="submit" class="btn btn-primary">Pagar Ahora</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

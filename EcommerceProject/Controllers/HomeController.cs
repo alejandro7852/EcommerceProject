@@ -10,7 +10,8 @@ namespace EcommerceProject.Controllers
 {
     public class HomeController(
         CategoriaService _categoriaService,
-        ProductoService _productoService
+        ProductoService _productoService,
+        OrdenService _ordenService
         ) : Controller
     {
         public async Task<IActionResult> IndexAsync()
@@ -34,7 +35,7 @@ namespace EcommerceProject.Controllers
         {
             var categorias = await _categoriaService.GetAllAsync();
             var productos = await _productoService.GetCatalogoAsync(busqueda: busqueda); 
-            var catalogo = new CatalogoVM { Categorias = categorias, Productos = productos, filtro = $"Result for:{busqueda}" };
+            var catalogo = new CatalogoVM { Categorias = categorias, Productos = productos, filtro = $"Resultados para: {busqueda}" };
 
             return View("index",catalogo);
         }
@@ -90,6 +91,23 @@ namespace EcommerceProject.Controllers
             carro.Remove(producto!);
             HttpContext.Session.Set("Carro", carro);
             return View("VerCarro", carro);
+        }
+        [HttpPost]
+        public async Task<IActionResult> PagarAhora()
+        {
+            var carro = HttpContext.Session.Get<List<CarroItemVM>>("Carro") ;
+
+            //TODO: change id
+            var userid = 1;
+            await _ordenService.AddAsync(carro, userid);
+
+            HttpContext.Session.Remove("Carro");
+
+            return View("VentaCompletada", carro);
+        }
+        public IActionResult VentaCompletada()
+        {
+            return View();
         }
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()

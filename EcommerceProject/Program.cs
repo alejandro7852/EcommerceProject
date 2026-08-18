@@ -12,8 +12,10 @@ builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("SqlString"));
 });
 builder.Services.AddScoped(typeof(GenericRepository<>));
+builder.Services.AddScoped<OrdenRepository>();
 builder.Services.AddScoped<CategoriaService>();
 builder.Services.AddScoped<ProductoService>();
+builder.Services.AddScoped<OrdenService>();
 builder.Services.AddSession(options => { options.IdleTimeout = TimeSpan.FromMinutes(30); });
 var app = builder.Build();
 

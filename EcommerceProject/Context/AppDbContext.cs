@@ -46,6 +46,7 @@ namespace EcommerceProject.Context
                 e.HasKey("OrdenId");
                 e.Property("OrdenId").ValueGeneratedOnAdd();
                 e.Property("TotalOrden").HasColumnType("decimal(10,2)");
+                e.Property(e => e.Estado).HasConversion<int>().HasDefaultValue(EstadoOrden.Pendiente);
                 e.HasOne(e => e.Usuario).WithMany(p => p.Ordenes).HasForeignKey(e => e.UsuarioId)
                 .OnDelete(DeleteBehavior.Restrict);
             });
@@ -60,6 +61,6 @@ namespace EcommerceProject.Context
                 .OnDelete(DeleteBehavior.Restrict);
             });
         }
-    
+
     }
 }
