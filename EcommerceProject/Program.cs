@@ -2,7 +2,8 @@ using Microsoft.EntityFrameworkCore;
 using EcommerceProject.Context;
 using EcommerceProject.Repositories;
 using EcommerceProject.Services;
-
+using EcommerceProject.Models.Configuration;
+using EcommerceProject.Services.Payment;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -16,7 +17,10 @@ builder.Services.AddScoped<OrdenRepository>();
 builder.Services.AddScoped<CategoriaService>();
 builder.Services.AddScoped<ProductoService>();
 builder.Services.AddScoped<OrdenService>();
+builder.Services.AddScoped<PaymentService, TransbankPaymentService>();
+
 builder.Services.AddSession(options => { options.IdleTimeout = TimeSpan.FromMinutes(30); });
+builder.Services.Configure<TransbankSettings>( builder.Configuration.GetSection("Transbank"));
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

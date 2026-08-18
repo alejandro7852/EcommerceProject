@@ -1,5 +1,6 @@
 ﻿using EcommerceProject.Context;
 using EcommerceProject.Entities;
+using Microsoft.EntityFrameworkCore;
 
 namespace EcommerceProject.Repositories
 {
@@ -10,19 +11,19 @@ namespace EcommerceProject.Repositories
         {
             _dbContext = dbContext;
         }
-        public override async Task AddAsync(Orden orden)
+        public override async Task<Orden> AddAsync(Orden orden)
         {
            using var transaccion = await _dbContext.Database.BeginTransactionAsync();
 
             try
             {
-                foreach (var detalle in orden.OrdenItems)
-                {
-                    var producto = await _dbContext.Producto.FindAsync(detalle.ProductoId);
-                    producto.Stock -= detalle.Cantidad;
+                //foreach (var detalle in orden.OrdenItems)
+                //{
+                //    var producto = await _dbContext.Producto.FindAsync(detalle.ProductoId);
+                //    producto.Stock -= detalle.Cantidad;
 
 
-                }
+                //}
                 await _dbContext.Orden.AddAsync(orden);
                 await _dbContext.SaveChangesAsync();    
 
@@ -34,6 +35,29 @@ namespace EcommerceProject.Repositories
                 await transaccion.RollbackAsync();
                 throw;
             }
+            return orden;
+        }
+        public async Task<Orden?> GetByIdWithItemsAsync(int ordenId)
+        {
+            return await _dbContext.Orden
+                .Include(x => x.OrdenItems)
+                .FirstOrDefaultAsync(x => x.OrdenId == ordenId);
+        }
+        public async Task DescontarStockAsync(Orden orden)
+        {
+            foreach (var detalle in orden.OrdenItems)
+            {
+                var producto = await _dbContext.Producto.FindAsync(detalle.ProductoId);
+
+                if (producto == null)
+                {
+                    throw new Exception($"No se encontró el producto {detalle.ProductoId}");
+                }
+
+                producto.Stock -= detalle.Cantidad;
+            }
+
+            await _dbContext.SaveChangesAsync();
         }
     }
 }

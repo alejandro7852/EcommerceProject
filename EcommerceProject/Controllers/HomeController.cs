@@ -1,6 +1,8 @@
 using EcommerceProject.Entities;
 using EcommerceProject.Models;
+using EcommerceProject.Models.Payment;
 using EcommerceProject.Services;
+using EcommerceProject.Services.Payment;
 using EcommerceProject.Utilities;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
@@ -8,12 +10,15 @@ using System.Diagnostics;
 
 namespace EcommerceProject.Controllers
 {
+   
     public class HomeController(
         CategoriaService _categoriaService,
         ProductoService _productoService,
-        OrdenService _ordenService
+        OrdenService _ordenService,
+        PaymentService _paymentService
         ) : Controller
     {
+        
         public async Task<IActionResult> IndexAsync()
         {
             var categorias = await _categoriaService.GetAllAsync();
@@ -93,17 +98,111 @@ namespace EcommerceProject.Controllers
             return View("VerCarro", carro);
         }
         [HttpPost]
+        //public async Task<IActionResult> PagarAhora()
+        //{
+        //    var carro = HttpContext.Session.Get<List<CarroItemVM>>("Carro") ;
+
+        //    //TODO: change id
+        //    var userid = 1;
+        //    await _ordenService.AddAsync(carro, userid);
+
+        //    HttpContext.Session.Remove("Carro");
+
+        //    return View("VentaCompletada", carro);
+        //}
+        [HttpPost]
         public async Task<IActionResult> PagarAhora()
         {
-            var carro = HttpContext.Session.Get<List<CarroItemVM>>("Carro") ;
+            var carro = HttpContext.Session.Get<List<CarroItemVM>>("Carro");
+
+            if (carro == null || !carro.Any())
+            {
+                return RedirectToAction("Carrito");
+            }
 
             //TODO: change id
-            var userid = 1;
-            await _ordenService.AddAsync(carro, userid);
+            var userId = 1;
+            var orden = await _ordenService.AddAsync(carro, userId);
 
-            HttpContext.Session.Remove("Carro");
+            // Identificador único de la compra para Webpay
+            var buyOrder = $"ORDEN-{orden.OrdenId}";
 
-            return View("VentaCompletada", carro);
+            // Identificador de sesión para Webpay
+            var sessionId = Guid.NewGuid().ToString();
+
+            // URL a la que Webpay devolverá al usuario
+            var returnUrl = Url.Action(
+                "WebpayReturn",
+                "Home",
+                null,
+                Request.Scheme);
+
+            // Crear transacción Webpay
+            var transaction = await _paymentService.CreateTransactionAsync(
+                buyOrder,
+                sessionId,
+                orden.TotalOrden,
+                returnUrl!);
+
+
+
+            var model = new WebpayRedirectVM
+            {
+                Url = transaction.Url,
+                Token = transaction.Token
+            };
+
+            return View("RedirectToWebpay", model);
+        }
+        public async Task<IActionResult> WebpayReturn(string token_ws)
+        {
+            if (string.IsNullOrEmpty(token_ws))
+            {
+                return Content("La transacción no contiene un token de Webpay.");
+            }
+
+            var response = _paymentService.CommitTransaction(token_ws);
+
+            if (response.ResponseCode == 0)
+            {
+                var ordenId = int.Parse(
+                    response.BuyOrder.Replace("ORDEN-", "")
+                );
+
+                var orden = await _ordenService.GetByIdAsync(ordenId);
+
+                if (orden == null)
+                {
+                    return Content("No se encontró la orden.");
+                }
+
+                orden.Estado = EstadoOrden.Pagado;
+
+                await _ordenService.UpdateAsync(orden);
+
+                await _ordenService.DescontarStockAsync(orden);
+
+                HttpContext.Session.Remove("Carro");
+
+                ViewBag.OrdenId = orden.OrdenId;
+                ViewBag.Monto = response.Amount;
+                ViewBag.Estado = response.Status;
+                ViewBag.BuyOrder = response.BuyOrder;
+                ViewBag.PagoRechazado = false;
+
+                return View("VentaCompletada");
+            }
+
+            ViewBag.OrdenId = int.Parse(
+                response.BuyOrder.Replace("ORDEN-", "")
+            );
+
+            ViewBag.Monto = response.Amount;
+            ViewBag.Estado = response.Status;
+            ViewBag.ResponseCode = response.ResponseCode;
+            ViewBag.PagoRechazado = true;
+
+            return View("VentaCompletada");
         }
         public IActionResult VentaCompletada()
         {

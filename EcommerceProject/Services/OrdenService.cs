@@ -6,7 +6,25 @@ namespace EcommerceProject.Services
 {
     public class OrdenService(OrdenRepository _ordenRepository)
     {
-        public async Task AddAsync(List<CarroItemVM> carroItemVM, int userId)
+        //public async Task AddAsync(List<CarroItemVM> carroItemVM, int userId)
+        //{
+        //    Orden orden = new Orden()
+        //    {
+        //        OrdenFecha = DateTime.Now,
+        //        UsuarioId = userId,
+        //        Estado = EstadoOrden.Pendiente,
+        //        TotalOrden = carroItemVM.Sum(x => x.Precio * x.Cantidad),
+        //        OrdenItems = carroItemVM.Select(x => new OrdenItem
+        //        {
+        //            ProductoId = x.ProductoId,
+        //            Cantidad = x.Cantidad,
+        //            Precio = x.Precio,
+
+        //        }).ToList()
+        //    };
+        //    await _ordenRepository.AddAsync(orden); 
+        //}
+        public async Task<Orden> AddAsync(List<CarroItemVM> carroItemVM, int userId)
         {
             Orden orden = new Orden()
             {
@@ -18,11 +36,29 @@ namespace EcommerceProject.Services
                 {
                     ProductoId = x.ProductoId,
                     Cantidad = x.Cantidad,
-                    Precio = x.Precio,
-
+                    Precio = x.Precio
                 }).ToList()
             };
-            await _ordenRepository.AddAsync(orden); 
+
+            return await _ordenRepository.AddAsync(orden);
         }
+        public async Task DescontarStockAsync(Orden orden)
+        {
+
+            await _ordenRepository.DescontarStockAsync(orden);
+        }
+        //public async Task<Orden?> GetByIdAsync(int ordenId)
+        //{
+        //    return await _ordenRepository.GetByIdAsync(ordenId);
+        //}
+        public async Task<Orden?> GetByIdAsync(int ordenId)
+        {
+            return await _ordenRepository.GetByIdWithItemsAsync(ordenId);
+        }
+        public async Task UpdateAsync(Orden orden)
+        {
+            await _ordenRepository.EditAsync(orden);
+        }
+
     }
 }

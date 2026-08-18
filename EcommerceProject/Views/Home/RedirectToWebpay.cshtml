@@ -1,0 +1,9 @@
+﻿@model EcommerceProject.Models.Payment.WebpayRedirectVM
+
+<form id="webpayForm" action="@Model.Url" method="POST">
+    <input type="hidden" name="token_ws" value="@Model.Token" />
+</form>
+
+<script>
+    document.getElementById("webpayForm").submit();
+</script>
