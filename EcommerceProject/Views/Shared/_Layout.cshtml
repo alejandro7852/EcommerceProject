@@ -52,9 +52,22 @@
                                 Productos
                             </a>
                         </li>
-                       
+                        <li class="nav-item dropdown">
+                            <!-- Se agrega link-light para el texto 'Perfil' e icono -->
+                            <a class="nav-link dropdown-toggle link-light" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                <i class="fas fa-user me-1"></i> Perfil
+                            </a>
+                            <ul class="dropdown-menu dropdown-menu-dark">
+                                <!-- Se reemplaza 'text-dark' por 'text-light' o 'dropdown-item' limpio -->
+                                <li><a class="dropdown-item text-light" href="/User/MisOrdenes">Mis compras</a></li>
+                                <li><hr class="dropdown-divider"></li>
+                                <li><a class="dropdown-item text-light" href="#">Cerrar sesión</a></li>
+                            </ul>
+                        </li>
                     </ul>
+
                     <div class="d-flex align-items-center">
+                     
                         @await Html.PartialAsync("_CarroBtn")
                     </div>
 

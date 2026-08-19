@@ -1,0 +1,42 @@
+﻿@model List<OrdenVM>
+
+<div class="row justify-content-between mt-4">
+    <div class="col-4">
+        <h4>Mis Compras</h4>
+    </div>
+</div>
+<hr />
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Fecha Compra</th>
+            <th>Estado Compra</th>
+            <th>Total compra</th>
+            <th>Productos</th>
+        </tr>
+
+    </thead>
+
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.OrdenFecha.ToString("dd/MM/yyyy")</td>
+                <td>@item.TotalOrden.ToString("C2")</td>
+                <td>@item.Estado</td>
+                <td>
+                    <ol class="list-group list-group-numbered">
+                        @foreach(var element in item.OrdenItems)
+                        {
+                            <li class="list-group-item">
+                                @(element.NombreProducto + " + " + element.Cantidad + " * " + element.Precio)
+                            </li>
+                        }
+                    </ol>
+                </td>
+            </tr>
+        }
+    </tbody>
+
+</table>

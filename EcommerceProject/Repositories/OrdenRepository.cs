@@ -59,5 +59,14 @@ namespace EcommerceProject.Repositories
 
             await _dbContext.SaveChangesAsync();
         }
+        public async Task<IEnumerable<Orden>> GetOrdenesByUserIdAsync(int userId)
+        {
+            var ordenes = await _dbContext.Orden
+                .Where(o => o.UsuarioId == userId)
+                .Include(o => o.OrdenItems)
+                .ThenInclude(x => x.Producto).ToListAsync();
+
+            return ordenes;
+        }
     }
 }

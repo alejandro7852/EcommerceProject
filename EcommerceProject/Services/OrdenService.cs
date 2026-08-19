@@ -59,6 +59,23 @@ namespace EcommerceProject.Services
         {
             await _ordenRepository.EditAsync(orden);
         }
+        public async Task<List<OrdenVM>> GetOrdenesByUserIdAsync(int userId)
+        {
+            var ordenes = await _ordenRepository.GetOrdenesByUserIdAsync(userId);
+            var ordenesVM = ordenes.Select(o => new OrdenVM
+            {
+                OrdenFecha = o.OrdenFecha,
+                TotalOrden = o.TotalOrden,
+                Estado = o.Estado,
+                OrdenItems = o.OrdenItems?.Select(oi => new OrdenItemVM
+                {
+                    NombreProducto = oi.Producto.Nombre,
+                    Cantidad = oi.Cantidad,
+                    Precio = oi.Precio
+                }).ToList()
+            }).ToList();
 
+            return ordenesVM;
+        }
     }
 }
