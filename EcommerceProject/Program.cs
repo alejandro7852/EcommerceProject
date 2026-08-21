@@ -17,6 +17,7 @@ builder.Services.AddScoped<OrdenRepository>();
 builder.Services.AddScoped<CategoriaService>();
 builder.Services.AddScoped<ProductoService>();
 builder.Services.AddScoped<OrdenService>();
+builder.Services.AddScoped<UsuarioService>();
 builder.Services.AddScoped<PaymentService, TransbankPaymentService>();
 
 builder.Services.AddSession(options => { options.IdleTimeout = TimeSpan.FromMinutes(30); });
