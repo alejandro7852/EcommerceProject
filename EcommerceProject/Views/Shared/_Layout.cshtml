@@ -1,4 +1,5 @@
-﻿<!DOCTYPE html>
+﻿
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -29,47 +30,63 @@
                     <span class="navbar-toggler-icon"></span>
                 </button>
 
-                <div class="collapse navbar-collapse" id="navbar">
+                <div class="collapse navbar-collapse d-sm-inline-flex  justify-content-between" id="navbar">
 
-                    <ul class="navbar-nav me-auto">
+                    <ul class="navbar-nav flex-grow-1">
 
                         <li class="nav-item">
-                            <a class="nav-link" asp-controller="Home" asp-action="Index">
+                            <a class="nav-link text-light" asp-area="" asp-controller="Home" asp-action="Index">
                                 <i class="fas fa-house me-1"></i>
                                 Inicio
                             </a>
                         </li>
+                        @if (User.Identity!.IsAuthenticated)
+                        {
+                            @if (User.IsInRole("Admin"))
+                            {
+                                <li class="nav-item">
+                                    <a class="nav-link text-light" asp-area="" asp-controller="Categoria" asp-action="Index">
+                                        <i class="fas fa-tags me-1"></i>
+                                        Categorías
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link text-light" asp-area="" asp-controller="Producto" asp-action="Index">
+                                        <i class="fas fa-store me-1"></i>
+                                        Productos
+                                    </a>
+                                </li>
+                            }
+                            @await Html.PartialAsync("_CarroBtn")
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle link-light" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                    <i class="fas fa-user me-1"></i> @User.Claims.Where(c => c.Type == ClaimTypes.Email).Select(c => c.Value).FirstOrDefault()
+                                </a>
+                                <ul class="dropdown-menu dropdown-menu-dark">
+                                    <li><a class="dropdown-item text-light" href="/User/MisOrdenes">Mis compras</a></li>
+                                    <li><hr class="dropdown-divider"></li>
+                                    <li><a class="dropdown-item text-light" href="#">Cerrar sesión</a></li>
+                                </ul>
+                            </li>
 
-                        <li class="nav-item">
-                            <a class="nav-link" asp-controller="Categoria" asp-action="Index">
-                                <i class="fas fa-tags me-1"></i>
-                                Categorías
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" asp-controller="Producto" asp-action="Index">
-                                <i class="fas fa-store me-1"></i>
-                                Productos
-                            </a>
-                        </li>
-                        <li class="nav-item dropdown">
-                            <!-- Se agrega link-light para el texto 'Perfil' e icono -->
-                            <a class="nav-link dropdown-toggle link-light" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                <i class="fas fa-user me-1"></i> Perfil
-                            </a>
-                            <ul class="dropdown-menu dropdown-menu-dark">
-                                <!-- Se reemplaza 'text-dark' por 'text-light' o 'dropdown-item' limpio -->
-                                <li><a class="dropdown-item text-light" href="/User/MisOrdenes">Mis compras</a></li>
-                                <li><hr class="dropdown-divider"></li>
-                                <li><a class="dropdown-item text-light" href="#">Cerrar sesión</a></li>
-                            </ul>
-                        </li>
+                        }
+                        else
+                        {
+                            @await Html.PartialAsync("_CarroBtn")
+                            <li class="nav-item">
+                                <a class="nav-link text-light" asp-area="" asp-controller="Cuentas" asp-action="Login">
+                                    <i class="fas fa-user me-1"></i>
+                                    Iniciar sesión
+                                </a>
+                            </li>
+                        }
+                       
                     </ul>
 
                     <div class="d-flex align-items-center">
-                     
-                        @await Html.PartialAsync("_CarroBtn")
+                        
                     </div>
+
 
 
                 </div>

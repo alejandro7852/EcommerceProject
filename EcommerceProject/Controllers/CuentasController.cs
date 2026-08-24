@@ -1,7 +1,9 @@
 ﻿using EcommerceProject.Models;
 using EcommerceProject.Services;
 using Microsoft.AspNetCore.Mvc;
-
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication;
+using System.Security.Claims;
 namespace EcommerceProject.Controllers
 {
     public class CuentasController(UsuarioService _usuarioService) : Controller
@@ -27,6 +29,18 @@ namespace EcommerceProject.Controllers
             }
             else
             {
+                List<Claim> claims = new List<Claim>
+                {
+                    new Claim(ClaimTypes.NameIdentifier, encontrado.UsuarioID.ToString()),
+                    new Claim(ClaimTypes.Name, encontrado.Nombre),
+                    new Claim(ClaimTypes.Email, encontrado.Email),
+                    new Claim(ClaimTypes.Role, encontrado.Tipo)
+                };
+                var identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+                var principal = new ClaimsPrincipal(identity);
+                var properties = new AuthenticationProperties { AllowRefresh = true };
+                await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, principal, properties);
+
                 return RedirectToAction("Index", "Home");
             }
 
@@ -56,6 +70,12 @@ namespace EcommerceProject.Controllers
                 
             }
             return View();
+        }
+        [HttpPost]
+        public async Task<IActionResult> Logout()
+        {
+            await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+            return RedirectToAction("Index", "Home");
         }
     }
 }

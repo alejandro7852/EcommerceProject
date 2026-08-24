@@ -6,37 +6,47 @@
     </div>
 </div>
 <hr />
-
-<table class="table table-striped">
-    <thead>
-        <tr>
-            <th>Fecha Compra</th>
-            <th>Estado Compra</th>
-            <th>Total compra</th>
-            <th>Productos</th>
-        </tr>
-
-    </thead>
-
-    <tbody>
-        @foreach (var item in Model)
-        {
+@if (Model.Count > 0)
+{
+    <table class="table table-striped">
+        <thead>
             <tr>
-                <td>@item.OrdenFecha.ToString("dd/MM/yyyy")</td>
-                <td>@item.TotalOrden.ToString("C2")</td>
-                <td>@item.Estado</td>
-                <td>
-                    <ol class="list-group list-group-numbered">
-                        @foreach(var element in item.OrdenItems)
-                        {
-                            <li class="list-group-item">
-                                @(element.NombreProducto + " + " + element.Cantidad + " * " + element.Precio)
-                            </li>
-                        }
-                    </ol>
-                </td>
+                <th>Fecha Compra</th>
+                <th>Estado Compra</th>
+                <th>Total compra</th>
+                <th>Productos</th>
             </tr>
-        }
-    </tbody>
 
-</table>
+        </thead>
+
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.OrdenFecha.ToString("dd/MM/yyyy")</td>
+                    <td>@item.Estado</td>
+                    <td>@item.TotalOrden.ToString("C2")</td>
+                    
+                    <td>
+                        <ol class="list-group list-group-numbered">
+                            @foreach (var element in item.OrdenItems)
+                            {
+                                <li class="list-group-item">
+                                    @(element.NombreProducto + " + " + element.Cantidad + " * " + element.Precio)
+                                </li>
+                            }
+                        </ol>
+                    </td>
+                </tr>
+            }
+        </tbody>
+
+    </table>
+}
+else
+{
+    <div class="alert alert-warning mt-3" role="alert">
+        Sin compras realizadas.
+    </div>
+}
+

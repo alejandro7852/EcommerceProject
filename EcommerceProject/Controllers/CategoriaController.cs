@@ -1,11 +1,13 @@
 ﻿using EcommerceProject.Models;
 using EcommerceProject.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace EcommerceProject.Controllers
 {
     public class CategoriaController(CategoriaService _categoriaService) : Controller
     {
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Index()
         {
             var categorias = await _categoriaService.GetAllAsync();

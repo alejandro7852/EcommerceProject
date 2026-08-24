@@ -48,7 +48,6 @@
                 <div class="card card-login p-3 p-sm-4 bg-white">
                     <div class="card-body">
 
-                        <!-- Header / Logo -->
                         <div class="text-center mb-4">
                             <div class="brand-icon">
                                 <i class="bi bi-person-circle"></i>
@@ -57,25 +56,21 @@
                             <p class="text-muted small">Ingresa tu cuenta para continuar</p>
                         </div>
 
-                        <!-- Formulario -->
                         <form asp-controller="Cuentas" asp-action="Login" method="post">
                             @Html.AntiForgeryToken()
 
-                            <!-- Email -->
                             <div class="form-floating mb-3">
                                 <input asp-for="Email" class="form-control" id="floatingEmail" placeholder="nombre@ejemplo.com" />
                                 <label for="floatingEmail">Correo electrónico</label>
                                 <span asp-validation-for="Email" class="text-danger small ms-1"></span>
                             </div>
 
-                            <!-- Clave -->
                             <div class="form-floating mb-3">
                                 <input asp-for="Clave" class="form-control" id="floatingPassword" placeholder="Contraseña" type="password" />
                                 <label for="floatingPassword">Contraseña</label>
                                 <span asp-validation-for="Clave" class="text-danger small ms-1"></span>
                             </div>
 
-                            <!-- Mensajes de feedback -->
                             @if (ViewBag.message != null)
                             {
                                 <div class="alert alert-danger alert-dismissible fade show p-2 small mt-3" role="alert">
@@ -83,14 +78,12 @@
                                 </div>
                             }
 
-                            <!-- Botón de Ingreso -->
                             <div class="d-grid mt-4">
                                 <button class="btn btn-primary btn-lg fs-6 fw-semibold py-2" type="submit">
                                     Ingresar
                                 </button>
                             </div>
 
-                            <!-- Registro / Footer -->
                             <div class="text-center mt-4">
                                 <p class="text-muted small mb-0">¿No tienes una cuenta?</p>
                                 <a asp-controller="Cuentas" asp-action="Registrarse" class="text-primary text-decoration-none fw-semibold small">
@@ -106,7 +99,6 @@
         </div>
     </div>
 
-    <!-- Scripts de Bootstrap y Validación Client-Side -->
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.css"></script>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>

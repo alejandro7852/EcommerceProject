@@ -1,9 +1,11 @@
 ﻿using EcommerceProject.Models;
 using EcommerceProject.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace EcommerceProject.Controllers
 {
+    [Authorize(Roles = "Admin")]
     public class ProductoController(ProductoService _productoService): Controller
     {
         public async Task<IActionResult> Index()

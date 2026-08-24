@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.EntityFrameworkCore;
 using EcommerceProject.Context;
 using EcommerceProject.Repositories;
@@ -21,6 +22,14 @@ builder.Services.AddScoped<UsuarioService>();
 builder.Services.AddScoped<PaymentService, TransbankPaymentService>();
 
 builder.Services.AddSession(options => { options.IdleTimeout = TimeSpan.FromMinutes(30); });
+builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+    .AddCookie(options =>
+    {
+        options.LoginPath = "/Cuentas/Login";
+        options.ExpireTimeSpan = TimeSpan.FromMinutes(30);
+        //options.LogoutPath = "/Usuario/Logout";
+        options.AccessDeniedPath = "/Home/Error";
+    });
 builder.Services.Configure<TransbankSettings>( builder.Configuration.GetSection("Transbank"));
 var app = builder.Build();
 

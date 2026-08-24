@@ -7,6 +7,7 @@ using EcommerceProject.Utilities;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Security.Claims;
 
 namespace EcommerceProject.Controllers
 {
@@ -102,7 +103,6 @@ namespace EcommerceProject.Controllers
         //{
         //    var carro = HttpContext.Session.Get<List<CarroItemVM>>("Carro") ;
 
-        //    //TODO: change id
         //    var userid = 1;
         //    await _ordenService.AddAsync(carro, userid);
 
@@ -120,9 +120,8 @@ namespace EcommerceProject.Controllers
                 return RedirectToAction("Carrito");
             }
 
-            //TODO: change id
-            var userId = 1;
-            var orden = await _ordenService.AddAsync(carro, userId);
+            var userId = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)!.Value;
+            var orden = await _ordenService.AddAsync(carro, int.Parse(userId));
 
             // Identificador único de la compra para Webpay
             var buyOrder = $"ORDEN-{orden.OrdenId}";
